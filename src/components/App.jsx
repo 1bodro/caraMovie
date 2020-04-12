@@ -1,18 +1,39 @@
 import React from "react";
-import { moviesData } from "../moviesData";
+// import { moviesData } from "../moviesData";
 import MovieItem from "./MovieItem";
+import MovieTabs from "./MovieTabs";
+import { API_URL, API_KEY_BODRO, API_DISCOVER, API_LANG } from "../utils/api";
 
 export default class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      movies: moviesData,
-      moviesWillWatch: []
+      movies: [],
+      moviesWillWatch: [],
+      sort_by: "popularity.desc"
     };
-
     this.removeMovie = this.removeMovie.bind(this);
     this.removeMovieFromWillWatch = this.removeMovieFromWillWatch.bind(this);
+    console.log("Constructor");
+  }
+
+  componentDidMount() {
+    console.log("Mounting монтирование");
+    this.getMovies();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Updating обновление");
+    console.log("prevState", prevState.sort_by);
+    console.log("prevProps", prevProps);
+    if (prevState.sort_by !== this.state.sort_by) {
+      this.getMovies();
+    }
+  }
+
+  componentWillUnmount() {
+    console.log("Unmounting Размонтирование");
   }
 
   removeMovie(movie) {
@@ -41,12 +62,40 @@ export default class App extends React.Component {
     });
   }
 
+  updateSortBy = value => {
+    this.setState({
+      sort_by: value
+    });
+  };
+
+  getMovies = () => {
+    fetch(
+      `${API_URL}${API_DISCOVER}?api_key=${API_KEY_BODRO}&language=${API_LANG}&sort_by=${
+        this.state.sort_by
+      }`
+    )
+      .then(data => {
+        return data.json();
+      })
+      .then(movies => {
+        this.setState({
+          movies: movies.results
+        });
+      })
+      .catch(error => console.error(error));
+  };
+
   render() {
+    console.log("render this.state", this.state);
     return (
       <div className="container m-4">
         <div className="row">
           <div className="col-9">
             <div className="row">
+              <MovieTabs
+                sort_by={this.state.sort_by}
+                updateSortBy={this.updateSortBy}
+              />
               {this.state.movies.map(movie => {
                 return (
                   <div className="col-6 mb-4" key={movie.id}>
@@ -62,12 +111,21 @@ export default class App extends React.Component {
             </div>
           </div>
           <div className="col-3">
-            <h4>Will Watch: {this.state.moviesWillWatch.length}</h4>
-            <ul className="list-group">
-              <li className="list-group-item">
-                <div className="d-flex justify-content-between" />
-              </li>
-            </ul>
+            <div style={{ position: "fixed" }}>
+              <h4>Will Watch: {this.state.moviesWillWatch.length}</h4>
+              <ul className="list-group">
+                {this.state.moviesWillWatch.map(movie => {
+                  return (
+                    <li className="list-group-item">
+                      <div className="d-flex justify-content-between">
+                        <div>{movie.title}</div>
+                        <div>{movie.vote_average}</div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
