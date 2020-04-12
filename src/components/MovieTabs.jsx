@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames/bind";
 
 class MovieTabs extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps, nextState) {
@@ -13,14 +14,16 @@ class MovieTabs extends React.Component {
   render() {
     const { sort_by, updateSortBy } = this.props;
     const handleClick = value => () => updateSortBy(value);
-    const getCLassLink = value => (value === sort_by ? "active" : null);
+
     console.log("MovieTabs Render");
     return (
       <div className="col-12">
         <ul className="tabs nav nav-pills mb-2 d-flex justify-content-center align-items-center">
           <li className="nav-item">
             <div
-              className={`nav-link ${getCLassLink("popularity.desc")}`}
+              className={`nav-link ${classNames({
+                active: sort_by === "popularity.desc"
+              })}`}
               onClick={handleClick("popularity.desc")}
             >
               Popularity
@@ -28,7 +31,9 @@ class MovieTabs extends React.Component {
           </li>
           <li className="nav-item">
             <div
-              className={`nav-link ${getCLassLink("revenue.desc")}`}
+              className={`nav-link ${classNames({
+                active: sort_by === "revenue.desc"
+              })}`}
               onClick={handleClick("revenue.desc")}
             >
               Revenue
@@ -36,7 +41,9 @@ class MovieTabs extends React.Component {
           </li>
           <li className="nav-item">
             <div
-              className={`nav-link ${getCLassLink("vote_average.desc")}`}
+              className={`nav-link ${classNames({
+                active: sort_by === "vote_average.desc"
+              })}`}
               onClick={handleClick("vote_average.desc")}
             >
               Vote average
