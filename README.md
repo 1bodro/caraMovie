@@ -23,6 +23,14 @@
 https://image.tmdb.org/t/p/w500${path}
 ```
 
-## Запрос на получение фильмов
+### Запрос на получение фильмов
 
 👉https://developers.themoviedb.org/3/discover/movie-discover
+
+### Жмзненные циклы компонентов
+
+http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+### Для добавления классов в MovieTabs библиотека
+
+https://github.com/JedWatson/classnames

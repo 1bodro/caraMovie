@@ -8,6 +8,9 @@ export default class MovieItem extends React.Component {
       willWatch: false
     };
   }
+  // componentWillUnmount() {
+  //   console.log("MoviItemas Unmounting Размонтирование");
+  // }
 
   render() {
     const {
@@ -58,7 +61,7 @@ export default class MovieItem extends React.Component {
             type="button"
             onClick={removeMovie.bind(null, movie)}
           >
-            Delete movie
+            Delete
           </button>
         </div>
       </div>
